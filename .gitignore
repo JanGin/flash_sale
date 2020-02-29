@@ -1,8 +1,8 @@
 HELP.md
 target/
-.mvn/wrapper/**
+!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
-**/src/test/**
+!**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -32,4 +32,4 @@ build/
 .vscode/
 
 ### custom ###
-log/**
+log/**/*.log
