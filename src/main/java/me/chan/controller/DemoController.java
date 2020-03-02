@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import me.chan.common.CodeMsg;
 import me.chan.common.Result;
 import me.chan.domain.User;
+import me.chan.mq.MessageSender;
 import me.chan.service.RedisService;
 import me.chan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class DemoController {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private MessageSender sender;
 
     @RequestMapping("/test")
     public String test() {
@@ -55,5 +59,11 @@ public class DemoController {
         String obj = (String)redisService.get(key);
         User data = JSONObject.parseObject(obj, User.class);
         return Result.success(data);
+    }
+
+    @RequestMapping("/mq")
+    public Result testMQ() {
+        sender.send("hello world");
+        return Result.success(CodeMsg.SUCCESS);
     }
 }
