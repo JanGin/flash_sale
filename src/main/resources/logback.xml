@@ -40,10 +40,10 @@
     </appender>
 
     <logger name="me.chan" level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="INFO" />
     </logger>
 
-    <logger name="me.chan" level="ERROR">
+    <logger name="me.chan.*" level="ERROR">
         <appender-ref ref="ERROR"/>
     </logger>
 
@@ -64,13 +64,9 @@
     </logger>
 
     <root level="INFO">
-        <!--
-        <appender-ref ref="DEBUG" />
-        -->
-        <appender-ref ref="INFO" />
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="INFO" />
         <appender-ref ref="ERROR" />
-
     </root>
 
 </configuration>
