@@ -43,7 +43,7 @@
         <appender-ref ref="INFO" />
     </logger>
 
-    <logger name="me.chan.*" level="ERROR">
+    <logger name="me.chan" level="ERROR">
         <appender-ref ref="ERROR"/>
     </logger>
 
