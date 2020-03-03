@@ -6,6 +6,8 @@ public interface RedisService {
 
     void set(String key, Object value, long expirationTime, TimeUnit timeUnit);
 
+    void set(String key, Object value);
+
     Object get(String key);
 
     Boolean containsKey(String key);

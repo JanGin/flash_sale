@@ -14,9 +14,15 @@ public class RedisServiceImpl implements RedisService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+
     @Override
     public void set(String key, Object value, long expirationTime, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, expirationTime, timeUnit);
+    }
+
+    @Override
+    public void set(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
     @Override

@@ -12,7 +12,6 @@ import me.chan.vo.GoodsDetailVO;
 import me.chan.vo.GoodsVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +41,7 @@ public class GoodsController {
 
     @Autowired
     private StringRedisService redisService;
+
 
     /*@RequestMapping("/to_list")
     public String listPage(@CookieValue(value = "token", required = false)String cookieToken,

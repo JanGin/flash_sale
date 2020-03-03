@@ -1,4 +1,4 @@
-package me.chan.mq;
+package me.chan.config;
 
 import me.chan.common.GlobalConstant;
 import org.springframework.amqp.core.Queue;

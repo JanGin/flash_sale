@@ -1,7 +1,7 @@
 package me.chan.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import me.chan.common.CodeMsg;
+import me.chan.common.RedisKeyPrefix;
 import me.chan.common.Result;
 import me.chan.domain.FlashSaleOrder;
 import me.chan.domain.OrderInfo;
@@ -9,19 +9,23 @@ import me.chan.domain.User;
 import me.chan.service.FlashSaleService;
 import me.chan.service.GoodsService;
 import me.chan.service.OrderService;
+import me.chan.service.RedisService;
 import me.chan.vo.GoodsVO;
-import me.chan.vo.OrderDetailVO;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @RequestMapping("/fs")
 @Controller
-public class FlashSaleController {
+public class FlashSaleController implements InitializingBean {
 
     @Autowired
     private GoodsService goodsService;
@@ -31,6 +35,9 @@ public class FlashSaleController {
 
     @Autowired
     private FlashSaleService fsService;
+
+    @Autowired
+    private RedisService redisService;
 
     /**
      * QPS : 616
@@ -88,5 +95,16 @@ public class FlashSaleController {
             return Result.error(CodeMsg.SERVER_ERROR);
         }
         return Result.success(orderInfo);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+        List<GoodsVO> list = goodsService.getGoodsList();
+        if (!CollectionUtils.isEmpty(list)) {
+            list.stream().forEach((e)->{
+                redisService.set(RedisKeyPrefix.GOODSLIST_CACHE+e.getId(), e.getStockCount());
+            });
+        }
     }
 }
