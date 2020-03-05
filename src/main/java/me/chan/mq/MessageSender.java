@@ -18,4 +18,9 @@ public class MessageSender {
         log.info("sending message:{}", message);
         amqpTemplate.convertAndSend(GlobalConstant.QUEUE_NAME, message);
     }
+
+    public void send(Object message) {
+        log.info("sending message:{}", message);
+        amqpTemplate.convertAndSend(GlobalConstant.QUEUE_NAME, message);
+    }
 }

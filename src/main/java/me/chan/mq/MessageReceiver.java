@@ -5,14 +5,23 @@ import me.chan.common.GlobalConstant;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import static me.chan.config.RabbitmqConfig.FLASHSALE_QUEUE;
+
 @Component
 @Slf4j
 public class MessageReceiver {
 
 
+
     @RabbitListener(queues={GlobalConstant.QUEUE_NAME})
     public void receive(String message) {
         log.info("receive message:{}", message);
+
+    }
+
+
+    @RabbitListener(queues = FLASHSALE_QUEUE)
+    public void receiveFSMsg() {
 
     }
 }

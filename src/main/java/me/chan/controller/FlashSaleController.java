@@ -1,11 +1,13 @@
 package me.chan.controller;
 
 import me.chan.common.CodeMsg;
+import me.chan.common.FlashsaleMsg;
 import me.chan.common.RedisKeyPrefix;
 import me.chan.common.Result;
 import me.chan.domain.FlashSaleOrder;
 import me.chan.domain.OrderInfo;
 import me.chan.domain.User;
+import me.chan.mq.MessageSender;
 import me.chan.service.FlashSaleService;
 import me.chan.service.GoodsService;
 import me.chan.service.OrderService;
@@ -38,6 +40,9 @@ public class FlashSaleController implements InitializingBean {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private MessageSender sender;
 
     /**
      * QPS : 616
@@ -72,7 +77,7 @@ public class FlashSaleController implements InitializingBean {
         return "order_detail";
     }
 
-    @PostMapping("/do_sale")
+   /* @PostMapping("/do_sale")
     @ResponseBody
     public Result<OrderInfo> doFlashSale(Model model, User user, @RequestParam("goodsId") Long goodsId) {
 
@@ -95,6 +100,32 @@ public class FlashSaleController implements InitializingBean {
             return Result.error(CodeMsg.SERVER_ERROR);
         }
         return Result.success(orderInfo);
+    }*/
+
+
+    @PostMapping("/do_sale")
+    @ResponseBody
+    public Result<Integer> doFlashSale(Model model, User user, @RequestParam("goodsId")Long goodsId) {
+        if (null == user) {
+           return Result.error(CodeMsg.SESSION_ERROR);
+        }
+
+        //预减库存
+        long stock = redisService.decr(RedisKeyPrefix.GOODSLIST_CACHE+goodsId);
+        if (stock < 0) {
+           return Result.error(CodeMsg.SALE_ACTIVITY_OVER);
+        }
+
+        FlashSaleOrder order = orderService.getFSOrderByGoodsIdAndUserId(goodsId, user.getId());
+        if(order != null) {
+           return Result.error(CodeMsg.SALE_REPEAT_FORBIDDEN);
+        }
+        FlashsaleMsg fsmsg = new FlashsaleMsg();
+        fsmsg.setGoodsId(goodsId);
+        fsmsg.setUser(user);
+        sender.send(fsmsg);
+        //入队成功，立即返回
+        return Result.success(1);
     }
 
     @Override
