@@ -18,12 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequestMapping("/fs")
 @Controller
@@ -105,7 +103,7 @@ public class FlashSaleController implements InitializingBean {
 
     @PostMapping("/do_sale")
     @ResponseBody
-    public Result<Integer> doFlashSale(Model model, User user, @RequestParam("goodsId")Long goodsId) {
+    public Result<Long> doFlashSale(Model model, User user, @RequestParam("goodsId")Long goodsId) {
         if (null == user) {
            return Result.error(CodeMsg.SESSION_ERROR);
         }
@@ -125,8 +123,22 @@ public class FlashSaleController implements InitializingBean {
         fsmsg.setUser(user);
         sender.send(fsmsg);
         //入队成功，立即返回
-        return Result.success(1);
+        return Result.success(1L);
     }
+
+
+    @GetMapping("/result")
+    @ResponseBody
+    public Result<Long> flashSaleResult(User user, @RequestParam("goodsId")Long goodsId) {
+        FlashSaleOrder order = orderService.getFSOrderByGoodsIdAndUserId(goodsId, user.getId());
+        if (Objects.nonNull(order)) {
+            return Result.success(order.getOrderId());
+        }
+
+        //继续排队
+        return Result.success(1L);
+    }
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
