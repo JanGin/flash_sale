@@ -21,7 +21,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RequestMapping("/fs")
@@ -42,6 +44,8 @@ public class FlashSaleController implements InitializingBean {
 
     @Autowired
     private MessageSender sender;
+
+    private Map<Long, Boolean> localOverMap = new HashMap<>();
 
     /**
      * QPS : 616
@@ -109,10 +113,17 @@ public class FlashSaleController implements InitializingBean {
            return Result.error(CodeMsg.SESSION_ERROR);
         }
 
+        //减少对redis的访问
+        boolean isOver = localOverMap.get(goodsId);
+        if (isOver) {
+            return Result.error(CodeMsg.SALE_ACTIVITY_OVER);
+        }
+
         //预减库存
         long stock = redisService.decr(RedisKeyPrefix.GOODSLIST_CACHE+goodsId);
         if (stock < 0) {
-           return Result.error(CodeMsg.SALE_ACTIVITY_OVER);
+            localOverMap.put(goodsId, true);
+            return Result.error(CodeMsg.SALE_ACTIVITY_OVER);
         }
 
         FlashSaleOrder order = orderService.getFSOrderByGoodsIdAndUserId(goodsId, user.getId());
@@ -142,12 +153,13 @@ public class FlashSaleController implements InitializingBean {
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
 
         List<GoodsVO> list = goodsService.getGoodsList();
         if (!CollectionUtils.isEmpty(list)) {
             list.stream().forEach((e)->{
                 redisService.set(RedisKeyPrefix.GOODSLIST_CACHE+e.getId(), e.getStockCount());
+                localOverMap.put(e.getId(), false);
             });
         }
     }
