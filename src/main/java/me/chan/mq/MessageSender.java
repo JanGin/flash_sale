@@ -2,6 +2,7 @@ package me.chan.mq;
 
 import lombok.extern.slf4j.Slf4j;
 import me.chan.common.GlobalConstant;
+import me.chan.config.RabbitmqConfig;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,8 @@ public class MessageSender {
         amqpTemplate.convertAndSend(GlobalConstant.QUEUE_NAME, message);
     }
 
-    public void send(Object message) {
+    public void sendFlashSaleMsg(String message) {
         log.info("sending message:{}", message);
-        amqpTemplate.convertAndSend(GlobalConstant.QUEUE_NAME, message);
+        amqpTemplate.convertAndSend(RabbitmqConfig.FLASHSALE_QUEUE, message);
     }
 }

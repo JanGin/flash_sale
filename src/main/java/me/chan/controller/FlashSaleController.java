@@ -1,5 +1,6 @@
 package me.chan.controller;
 
+import com.alibaba.fastjson.JSON;
 import me.chan.common.CodeMsg;
 import me.chan.common.FlashsaleMsg;
 import me.chan.common.RedisKeyPrefix;
@@ -121,7 +122,7 @@ public class FlashSaleController implements InitializingBean {
         FlashsaleMsg fsmsg = new FlashsaleMsg();
         fsmsg.setGoodsId(goodsId);
         fsmsg.setUser(user);
-        sender.send(fsmsg);
+        sender.sendFlashSaleMsg(JSON.toJSONString(fsmsg));
         //入队成功，立即返回
         return Result.success(1L);
     }

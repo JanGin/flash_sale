@@ -74,7 +74,7 @@
                 url:"/fs/do_sale",
                 type:"POST",
                 data:{
-                    goodsId:$("#goodsId").val()
+                    "goodsId":$("#goodsId").val()
                 },
                 success:function(data){
                     console.log(data);
@@ -82,7 +82,7 @@
                         //window.location.href="/order/order_detail.htm?id="+data.data.id;
                         getFsResult($("#goodsId").val());
                     }else{
-                        layer.msg(data.msg);
+                        layer.msg(data.message);
                     }
                 },
                 error:function(){
@@ -114,14 +114,14 @@
                     }else{
                         layer.confirm("恭喜你，成功抢到！查看订单？", {btn:["确定","取消"]},
                             function(){
-                                window.location.href="/order/order_detail.htm?orderId="+result;
+                                window.location.href="/order/order_detail.htm?id="+result;
                             },
                             function(){
                                 layer.closeAll();
                             });
                     }
                 }else{
-                    layer.msg(data.msg);
+                    layer.msg(data.message);
                 }
             },
             error:function(){

@@ -16,8 +16,8 @@ public interface OrderDao {
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     Long insertOrder(@Param("order") OrderInfo order);
 
-    @Insert("INSERT INTO flash_sale_order (user_id, goods_id, order_id) " +
-            "VALUES (#{order.userId}, #{order.goodsId}, #{order.orderId})")
+    @Insert("INSERT INTO flash_sale_order (user_id, goods_id, order_id, create_time) " +
+            "VALUES (#{order.userId}, #{order.goodsId}, #{order.orderId}, now())")
     @SelectKey(keyProperty = "order.id", keyColumn = "order.id", resultType = Long.class, before = false, statement = "SELECT LAST_INSERT_ID()")
     Long insertFlashOrder(@Param("order") FlashSaleOrder fsOrder);
 
@@ -40,7 +40,8 @@ public interface OrderDao {
         @Result(column = "id", property = "id"),
         @Result(column = "goods_id", property = "goodsId"),
         @Result(column = "user_id", property = "userId"),
-        @Result(column = "order_id", property = "orderId")
+        @Result(column = "order_id", property = "orderId"),
+        @Result(column = "create_time", property = "createTime")
     })
     FlashSaleOrder getFSOrderByGoodsIdAndUserId(@Param("goodsId") Long goodsId, @Param("userId") Long userId);
 }

@@ -1,6 +1,5 @@
 package me.chan.mq;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import me.chan.common.FlashsaleMsg;
 import me.chan.common.GlobalConstant;
@@ -37,10 +36,9 @@ public class MessageReceiver {
 
 
     @RabbitListener(queues = FLASHSALE_QUEUE)
-    public void receiveFSMsg(Object message) {
-        log.info("[the consumer receives message]:{}", message.toString());
-        JSONObject obj = JSONObject.parseObject(message.toString());
-        FlashsaleMsg fsmsg = JSONUtil.parseJSON2Obj(obj, FlashsaleMsg.class);
+    public void receiveFSMsg(String message) {
+        log.info("[the consumer receives message]:{}", message);
+        FlashsaleMsg fsmsg = JSONUtil.parseJSONStr2Obj(message, FlashsaleMsg.class);
         long goodsId = fsmsg.getGoodsId();
         User user = fsmsg.getUser();
         GoodsVO goods = goodsService.getGoodsById(goodsId);
