@@ -106,9 +106,10 @@ public class FlashSaleController implements InitializingBean {
     }*/
 
 
-    @PostMapping("/do_sale")
+    @PostMapping("/{path}/do_sale")
     @ResponseBody
-    public Result<Long> doFlashSale(Model model, User user, @RequestParam("goodsId")Long goodsId) {
+    public Result<Long> doFlashSale(Model model, User user, @RequestParam("goodsId")Long goodsId,
+                            @PathVariable("path")String path) {
         if (null == user) {
            return Result.error(CodeMsg.SESSION_ERROR);
         }
