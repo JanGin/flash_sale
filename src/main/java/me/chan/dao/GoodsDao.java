@@ -13,7 +13,7 @@ import java.util.List;
 public interface GoodsDao {
 
     @Select("SELECT b.*, a.sale_price, a.start_date, a.end_date, a.stock_count FROM flash_sale_goods a " +
-            "LEFT JOIN goods b ON a.goods_id = b.id")
+            "LEFT JOIN goods b ON a.goods_id = b.id WHERE a.stock_count > 0")
     @Results({
             @Result(column = "sale_price", property = "salePrice"),
             @Result(column = "start_date", property = "startDate"),
