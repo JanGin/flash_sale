@@ -13,7 +13,7 @@ public class CodeMsg {
     public static CodeMsg SUCCESS = new CodeMsg(0, "操作成功");
     public static CodeMsg SERVER_ERROR = new CodeMsg(500100, "服务端异常");
     public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
-    public static CodeMsg REQUEST_ILLEGAL = new CodeMsg(500102, "请求非法");
+    public static CodeMsg REQUEST_ILLEGAL = new CodeMsg(500102, "非法请求");
     public static CodeMsg ACCESS_LIMIT_REACHED= new CodeMsg(500104, "访问太频繁！");
     //登录模块 5002XX
     public static CodeMsg SESSION_ERROR = new CodeMsg(500210, "当前会话不存在或者已经失效");
@@ -28,6 +28,7 @@ public class CodeMsg {
     public static CodeMsg SALE_ACTIVITY_OVER = new CodeMsg(500311, "当前活动已结束");
     public static CodeMsg SALE_REPEAT_FORBIDDEN = new CodeMsg(500312, "请勿刷单");
     public static CodeMsg SALE_PRODUCT_NOT_EXIST = new CodeMsg(500313, "当前商品已下架或被移除");
+    public static CodeMsg SALE_PRODUCT_SELLOUT = new CodeMsg(500315, "该商品卖完啦!");
 
 
     //订单模块

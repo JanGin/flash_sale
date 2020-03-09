@@ -115,12 +115,11 @@ public class FlashSaleController implements InitializingBean {
         }
 
         String redisKey = path;
-        boolean isPass = fsService.validFlashSalePath(user, goodsId, path);
-       /* String result = strRedisService.get(redisKey);
-        if (Objects.isNull(result)) {
-            return
+        boolean isPass = fsService.validFlashSalePath(user, goodsId, redisKey);
+        if (!isPass) {
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
         }
-*/
+
         //减少对redis的访问
         boolean isOver = localOverMap.get(goodsId);
         if (isOver) {
@@ -155,6 +154,29 @@ public class FlashSaleController implements InitializingBean {
 
         String path = fsService.generateFsPath(user, goodsId);
         return Result.success(path);
+    }
+
+
+    /**
+     * 输出base64编码的图片
+     * @param user
+     * @param goodsId
+     * @return
+     */
+    @GetMapping("/verifyCode")
+    @ResponseBody
+    public Result<String> verifyCode(User user, @RequestParam("goodsId")Long goodsId) {
+        /**
+        if(null == user) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+
+        if (!localOverMap.get(goodsId)) {
+            return Result.error(CodeMsg.SALE_PRODUCT_SELLOUT);
+        }
+         **/
+        String base64Img = fsService.createBase64VerifyImg(user, goodsId);
+        return Result.success(base64Img);
     }
 
 
