@@ -108,12 +108,19 @@ public class FlashSaleController implements InitializingBean {
 
     @PostMapping("/{path}/do_sale")
     @ResponseBody
-    public Result<Long> doFlashSale(Model model, User user, @RequestParam("goodsId")Long goodsId,
+    public Result<Long> doFlashSale(User user, @RequestParam("goodsId")Long goodsId,
                             @PathVariable("path")String path) {
         if (null == user) {
            return Result.error(CodeMsg.SESSION_ERROR);
         }
 
+        String redisKey = path;
+        boolean isPass = fsService.validFlashSalePath(user, goodsId, path);
+       /* String result = strRedisService.get(redisKey);
+        if (Objects.isNull(result)) {
+            return
+        }
+*/
         //减少对redis的访问
         boolean isOver = localOverMap.get(goodsId);
         if (isOver) {
@@ -137,6 +144,17 @@ public class FlashSaleController implements InitializingBean {
         sender.sendFlashSaleMsg(JSON.toJSONString(fsmsg));
         //入队成功，立即返回
         return Result.success(1L);
+    }
+
+    @ResponseBody
+    @GetMapping("/path")
+    public Result<String> path(User user, @RequestParam("goodsId") Long goodsId) {
+        if (null == user) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+
+        String path = fsService.generateFsPath(user, goodsId);
+        return Result.success(path);
     }
 
 

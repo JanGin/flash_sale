@@ -9,4 +9,7 @@ public class RedisKeyPrefix {
     public static final String GOODSID_HTML_CACHE = "goods:html:";
 
     public static final String GOODSLIST_CACHE = "goods:list:";
+
+    public static final String GOODSPATH_CACHE = "goods:path:";
+
 }

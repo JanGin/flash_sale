@@ -7,4 +7,6 @@ public interface StringRedisService {
     void set(String key, String value, long expire, TimeUnit timeUnit);
 
     String get(String key);
+
+    boolean delete(String key);
 }
