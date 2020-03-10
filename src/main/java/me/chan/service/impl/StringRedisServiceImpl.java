@@ -28,4 +28,14 @@ public class StringRedisServiceImpl implements StringRedisService {
     public boolean delete(String key) {
         return stringTemplate.delete(key);
     }
+
+    @Override
+    public Long incr(String key) {
+        return stringTemplate.opsForValue().increment(key);
+    }
+
+    @Override
+    public Long decr(String key) {
+        return stringTemplate.opsForValue().decrement(key);
+    }
 }

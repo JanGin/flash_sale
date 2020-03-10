@@ -9,4 +9,8 @@ public interface StringRedisService {
     String get(String key);
 
     boolean delete(String key);
+
+    Long incr(String key);
+
+    Long decr(String key);
 }

@@ -12,5 +12,4 @@ public interface FlashSaleService {
 
     boolean validFlashSalePath(User user, Long goodsId, String path);
 
-    String createBase64VerifyImg(User user, Long goodsIds);
 }

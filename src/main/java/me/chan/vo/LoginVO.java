@@ -1,8 +1,8 @@
 package me.chan.vo;
 
 import lombok.Data;
-import me.chan.annotation.constant.FormInputConstant;
-import me.chan.annotation.validate.FormInput;
+import me.chan.annotation.FormInput;
+import me.chan.annotation.FormInputConstant;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;

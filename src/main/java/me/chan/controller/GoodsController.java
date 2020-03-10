@@ -1,6 +1,7 @@
 package me.chan.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import me.chan.annotation.TrafficLimit;
 import me.chan.common.CodeMsg;
 import me.chan.common.RedisKeyPrefix;
 import me.chan.common.Result;
@@ -143,6 +144,7 @@ public class GoodsController {
 
     @RequestMapping("/detail/{id}")
     @ResponseBody
+    @TrafficLimit(accessTimes = 3)
     public Result<GoodsDetailVO> goodsDetail(Model model, User user,
                                @PathVariable("id") Long id) {
         String goodsId = String.valueOf(id);

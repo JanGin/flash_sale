@@ -72,6 +72,12 @@
         getDetail();
 
         $("#buyButton").on('click', function () {
+            if ($("#verifyImg").css("display")=="none") {
+                $("#verifyImg").show();
+            }
+            if ($("#verifyCode").css("display")=="none") {
+                $("#verifyCode").show();
+            }
 
             var code = $("#verifyCode").val();
             if (code == '') {
@@ -214,13 +220,9 @@
                 clearTimeout(timeout);
             }
             $("#saleTip").html("秒杀进行中");
-            $("#verifyImg").show();
-            $("#verifyCode").show();
         } else {//秒杀已经结束
             $("#buyButton").attr("disabled", true);
             $("#saleTip").html("秒杀已经结束");
-            $("#verifyImg").hide();
-            $("#verifyCode").hide();
         }
     }
 
@@ -233,7 +235,7 @@
             success:function(data) {
                 if(data.retCode == 0) {
                     render(data.data);
-                } else{
+                } else {
                     layer.msg(data.message);
                 }
             },

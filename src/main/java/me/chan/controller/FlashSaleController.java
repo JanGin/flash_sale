@@ -1,6 +1,7 @@
 package me.chan.controller;
 
 import com.alibaba.fastjson.JSON;
+import me.chan.annotation.NeedLogin;
 import me.chan.common.CodeMsg;
 import me.chan.common.FlashsaleMsg;
 import me.chan.common.RedisKeyPrefix;
@@ -108,11 +109,13 @@ public class FlashSaleController implements InitializingBean {
 
     @PostMapping("/{path}/do_sale")
     @ResponseBody
+    @NeedLogin
     public Result<Long> doFlashSale(User user, @RequestParam("goodsId")Long goodsId,
                                     @RequestParam("code")String code,   @PathVariable("path")String path) {
+        /*
         if (null == user) {
            return Result.error(CodeMsg.SESSION_ERROR);
-        }
+        }*/
 
         String redisKey = path;
         boolean isPass = fsService.validFlashSalePath(user, goodsId, redisKey);

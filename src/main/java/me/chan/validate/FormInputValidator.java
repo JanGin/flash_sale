@@ -1,7 +1,7 @@
 package me.chan.validate;
 
-import me.chan.annotation.constant.FormInputConstant;
-import me.chan.annotation.validate.FormInput;
+import me.chan.annotation.FormInput;
+import me.chan.annotation.FormInputConstant;
 import me.chan.util.ValidationUtil;
 
 import javax.validation.ConstraintValidator;

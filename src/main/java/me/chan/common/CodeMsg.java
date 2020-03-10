@@ -29,6 +29,7 @@ public class CodeMsg {
     public static CodeMsg SALE_REPEAT_FORBIDDEN = new CodeMsg(500312, "请勿刷单");
     public static CodeMsg SALE_PRODUCT_NOT_EXIST = new CodeMsg(500313, "当前商品已下架或被移除");
     public static CodeMsg SALE_PRODUCT_SELLOUT = new CodeMsg(500315, "该商品卖完啦!");
+    public static CodeMsg VERIFY_CODE_FAILED = new CodeMsg(500316, "验证码输入错误或已过期");
 
 
     //订单模块

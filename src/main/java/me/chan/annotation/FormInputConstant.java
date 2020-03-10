@@ -1,4 +1,4 @@
-package me.chan.annotation.constant;
+package me.chan.annotation;
 
 public class FormInputConstant {
 

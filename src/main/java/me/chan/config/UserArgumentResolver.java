@@ -1,9 +1,9 @@
 package me.chan.config;
 
 import me.chan.common.GlobalConstant;
+import me.chan.common.UserContext;
 import me.chan.domain.User;
 import me.chan.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
@@ -14,7 +14,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -35,7 +34,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) throws Exception {
 
-        HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+        /*HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
         String cookieToken = getCookieValue(request);
         String paramToken = request.getParameter(GlobalConstant.COOKIE_TOKEN_NAME);
@@ -43,7 +42,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
 
         String token = StringUtils.isBlank(cookieToken)?paramToken:cookieToken;
-        return userService.getUserByToken(token, response);
+        return userService.getUserByToken(token, response);*/
+        return UserContext.get();
     }
 
     private String getCookieValue(HttpServletRequest request) {
