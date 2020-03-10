@@ -12,4 +12,6 @@ public class RedisKeyPrefix {
 
     public static final String GOODSPATH_CACHE = "goods:path:";
 
+    public static final String VERIFY_CODE = "verify:code:";
+
 }

@@ -9,10 +9,7 @@ import me.chan.domain.FlashSaleOrder;
 import me.chan.domain.OrderInfo;
 import me.chan.domain.User;
 import me.chan.mq.MessageSender;
-import me.chan.service.FlashSaleService;
-import me.chan.service.GoodsService;
-import me.chan.service.OrderService;
-import me.chan.service.RedisService;
+import me.chan.service.*;
 import me.chan.vo.GoodsVO;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,9 @@ public class FlashSaleController implements InitializingBean {
 
     @Autowired
     private FlashSaleService fsService;
+
+    @Autowired
+    private VerifyCodeService vcService;
 
     @Autowired
     private RedisService redisService;
@@ -109,7 +109,7 @@ public class FlashSaleController implements InitializingBean {
     @PostMapping("/{path}/do_sale")
     @ResponseBody
     public Result<Long> doFlashSale(User user, @RequestParam("goodsId")Long goodsId,
-                            @PathVariable("path")String path) {
+                                    @RequestParam("code")String code,   @PathVariable("path")String path) {
         if (null == user) {
            return Result.error(CodeMsg.SESSION_ERROR);
         }
@@ -118,6 +118,11 @@ public class FlashSaleController implements InitializingBean {
         boolean isPass = fsService.validFlashSalePath(user, goodsId, redisKey);
         if (!isPass) {
             return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
+
+        boolean isCorrect = vcService.checkVerifyCode(user.getId(), goodsId, code);
+        if (!isCorrect) {
+            return Result.error(CodeMsg.VERIFY_CODE_FAILED);
         }
 
         //减少对redis的访问
@@ -175,7 +180,7 @@ public class FlashSaleController implements InitializingBean {
             return Result.error(CodeMsg.SALE_PRODUCT_SELLOUT);
         }
          **/
-        String base64Img = fsService.createBase64VerifyImg(user, goodsId);
+        String base64Img = vcService.createBase64VerifyImg(user, goodsId);
         return Result.success(base64Img);
     }
 

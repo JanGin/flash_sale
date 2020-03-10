@@ -73,20 +73,24 @@
 
         $("#buyButton").on('click', function () {
 
+            var code = $("#verifyCode").val();
+            if (code == '') {
+                layer.msg("请先输入验证码！");
+                return ;
+            }
+
             $.ajax({
-                //url:"/fs/do_sale",
                 url: "/fs/path",        //获取秒杀地址
                 type:"GET",
                 data:{
                     "goodsId":$("#goodsId").val()
                 },
                 success:function(data){
-                    if(data.retCode == 0){
-                        //window.location.href="/order/order_detail.htm?id="+data.data.id;
+                    if(data.retCode == 0) {
                         //获取秒杀path
                         var path = data.data;
                         doFs($("#goodsId").val(), path);
-                    }else{
+                    } else{
                         layer.msg(data.message);
                     }
                 },
@@ -104,15 +108,15 @@
                 data:{
                     "goodsId":$("#goodsId").val()
                 },
-                success:function(data){
-                    if(data.retCode == 0){
+                success:function(data) {
+                    if(data.retCode == 0) {
                         var src = data.data;
                         $("#verifyImg").attr("src", "data:image/jpeg;base64,"+src);
-                    }else{
+                    } else{
                         layer.msg(data.message);
                     }
                 },
-                error:function(){
+                error:function() {
                     layer.msg("服务器开小差了...");
                 }
             });
@@ -126,31 +130,32 @@
             url:"/fs/"+path+"/do_sale",
             type:"POST",
             data:{
-                "goodsId" : goodsId
+                "goodsId" : goodsId,
+                "code": $("#verifyCode").val().trim()
             },
             success:function(data){
                 if(data.retCode == 0){
                     var result = data.data;
-                    if(result < 0){
+                    if(result < 0) {
                         layer.msg("对不起，请刷新页面重试");
-                    }else if(result == 1){//继续轮询，还在排队
+                    } else if(result == 1) {//继续轮询，还在排队
                         setTimeout(function(){
                             getFsResult(goodsId);
                         }, 200);
-                    }else{
+                    } else {
                         layer.confirm("恭喜你，成功抢到商品！查看订单？", {btn:["确定","取消"]},
-                            function(){
+                            function() {
                                 window.location.href="/order/order_detail.htm?id="+result;
                             },
-                            function(){
+                            function() {
                                 layer.closeAll();
                             });
                     }
-                }else{
+                } else {
                     layer.msg(data.message);
                 }
             },
-            error:function(){
+            error:function() {
                 layer.msg("服务器开小差了...");
             }
         });
@@ -164,16 +169,16 @@
             data:{
                 "goodsId" : goodsId
             },
-            success:function(data){
+            success:function(data) {
                 if(data.retCode == 0){
                     var result = data.data;
-                    if(result < 0){
+                    if(result < 0) {
                         layer.msg("对不起，请刷新页面重试");
-                    }else if(result == 1){//继续轮询，还在排队
-                        setTimeout(function(){
+                    } else if(result == 1) {//继续轮询，还在排队
+                        setTimeout(function() {
                             getFsResult(goodsId);
                         }, 200);
-                    }else{
+                    } else {
                         layer.confirm("恭喜你，成功抢到！查看订单？", {btn:["确定","取消"]},
                             function(){
                                 window.location.href="/order/order_detail.htm?id="+result;
@@ -182,11 +187,11 @@
                                 layer.closeAll();
                             });
                     }
-                }else{
+                } else {
                     layer.msg(data.message);
                 }
             },
-            error:function(){
+            error:function() {
                 layer.msg("服务器开小差了...");
             }
         });
@@ -196,14 +201,14 @@
     function countDown(){
         var remainSeconds = $("#remainSeconds").val();
         var timeout;
-        if(remainSeconds > 0){//秒杀还没开始，倒计时
+        if(remainSeconds > 0) {//秒杀还没开始，倒计时
             $("#saleTip").html("秒杀倒计时："+remainSeconds+"秒");
             $("#buyButton").attr("disabled", true);
             timeout = setTimeout(function(){
                 $("#remainSeconds").val(remainSeconds - 1);
                 countDown();
             },1000);
-        }else if(remainSeconds == 0){//秒杀进行中
+        } else if(remainSeconds == 0) {//秒杀进行中
             $("#buyButton").attr("disabled", false);
             if(timeout){
                 clearTimeout(timeout);
@@ -211,7 +216,7 @@
             $("#saleTip").html("秒杀进行中");
             $("#verifyImg").show();
             $("#verifyCode").show();
-        }else{//秒杀已经结束
+        } else {//秒杀已经结束
             $("#buyButton").attr("disabled", true);
             $("#saleTip").html("秒杀已经结束");
             $("#verifyImg").hide();
@@ -225,14 +230,14 @@
             url:"/goods/detail/" + goodsId ,
             type:"GET",
 
-            success:function(data){
-                if(data.retCode == 0){
+            success:function(data) {
+                if(data.retCode == 0) {
                     render(data.data);
-                }else{
+                } else{
                     layer.msg(data.message);
                 }
             },
-            error:function(){
+            error:function() {
                 layer.msg("服务器开小差了...");
             }
         });
@@ -255,24 +260,26 @@
         $("#salePrice").text(goods.salePrice);
         $("#stockCount").text(goods.stockCount);
 
-        $.ajax({
-            url: "/fs/verifyCode",
-            type:"GET",
-            data:{
-                "goodsId":$("#goodsId").val()
-            },
-            success:function(data){
-                if(data.retCode == 0){
-                    var src = data.data;
-                    $("#verifyImg").attr("src", "data:image/jpeg;base64,"+src);
-                }else{
-                    layer.msg(data.message);
+        if (Number($("#remainSeconds").val()) == 0) {
+            $.ajax({
+                url: "/fs/verifyCode",
+                type: "GET",
+                data: {
+                    "goodsId": $("#goodsId").val()
+                },
+                success: function (data) {
+                    if (data.retCode == 0) {
+                        var src = data.data;
+                        $("#verifyImg").attr("src", "data:image/jpeg;base64," + src);
+                    } else {
+                        layer.msg(data.message);
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
                 }
-            },
-            error:function(e){
-                console.log(e);
-            }
-        });
+            });
+        }
         countDown();
     }
 </script>
