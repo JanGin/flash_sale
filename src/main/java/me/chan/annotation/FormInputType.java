@@ -1,6 +1,6 @@
 package me.chan.annotation;
 
-public class FormInputConstant {
+public class FormInputType {
 
     public static final String INPUT_MOBILENUMBER = "mobileNumber";
 

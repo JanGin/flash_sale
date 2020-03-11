@@ -2,7 +2,7 @@ package me.chan.vo;
 
 import lombok.Data;
 import me.chan.annotation.FormInput;
-import me.chan.annotation.FormInputConstant;
+import me.chan.annotation.FormInputType;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class LoginVO {
 
     @NotNull
-    @FormInput(message = "请检查手机号码输入是否正确", type = FormInputConstant.INPUT_MOBILENUMBER)
+    @FormInput(message = "请检查手机号码输入是否正确", type = FormInputType.INPUT_MOBILENUMBER)
     private String mobile;
 
     @NotNull

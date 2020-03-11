@@ -20,7 +20,7 @@ public @interface FormInput {
 
     String message() default "表单项内容输入有误";
 
-    String type() default FormInputConstant.FORM_INPUT;
+    String type() default FormInputType.FORM_INPUT;
 
     boolean required() default true;
 
