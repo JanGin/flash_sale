@@ -37,6 +37,10 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        //尝试获取并设置登陆用户, 以免之后的参数处理类获取失败
+        User user = getUser(request, response);
+        UserContext.setUser(user);
+
         if (handler instanceof HandlerMethod) {
             HandlerMethod hm = (HandlerMethod) handler;
             TrafficLimit tl = hm.getMethodAnnotation(TrafficLimit.class);
@@ -44,10 +48,7 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
                 Long userId = Long.MIN_VALUE;
                 String key = request.getRequestURI();
                 NeedLogin nl = hm.getMethodAnnotation(NeedLogin.class);
-                if (nl != null && nl.need()) {
-                    //尝试获取登陆用户
-                    User user = getUser(request, response);
-                    UserContext.setUser(user);
+                if (nl != null && nl.value()) {
                     if (user != null) {
                         userId = user.getId();
                         key = key + "_" + userId;

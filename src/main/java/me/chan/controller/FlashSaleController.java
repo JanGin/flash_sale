@@ -109,7 +109,7 @@ public class FlashSaleController implements InitializingBean {
 
     @PostMapping("/{path}/do_sale")
     @ResponseBody
-    @NeedLogin
+    @NeedLogin(true)
     public Result<Long> doFlashSale(User user, @RequestParam("goodsId")Long goodsId,
                                     @RequestParam("code")String code,   @PathVariable("path")String path) {
         /*

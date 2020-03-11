@@ -18,7 +18,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (handler instanceof HandlerMethod) {
             HandlerMethod hm = (HandlerMethod) handler;
             NeedLogin needLogin = hm.getMethodAnnotation(NeedLogin.class);
-            if (needLogin != null && needLogin.need()) {
+            if (needLogin != null && needLogin.value()) {
                 User user = UserContext.get();
                 if (null == user) {
                     response.sendRedirect("/login");
