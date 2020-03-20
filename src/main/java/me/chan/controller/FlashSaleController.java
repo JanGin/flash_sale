@@ -2,6 +2,7 @@ package me.chan.controller;
 
 import com.alibaba.fastjson.JSON;
 import me.chan.annotation.NeedLogin;
+import me.chan.annotation.TrafficLimit;
 import me.chan.common.CodeMsg;
 import me.chan.common.FlashsaleMsg;
 import me.chan.common.RedisKeyPrefix;
@@ -109,7 +110,8 @@ public class FlashSaleController implements InitializingBean {
 
     @PostMapping("/{path}/do_sale")
     @ResponseBody
-    @NeedLogin(true)
+    @TrafficLimit(accessTimes = 5, withinSeconds = 10)
+    @NeedLogin
     public Result<Long> doFlashSale(User user, @RequestParam("goodsId")Long goodsId,
                                     @RequestParam("code")String code,   @PathVariable("path")String path) {
         /*
@@ -134,6 +136,8 @@ public class FlashSaleController implements InitializingBean {
             return Result.error(CodeMsg.SALE_ACTIVITY_OVER);
         }
 
+        //每点击一次按钮都能成功预减库存，有问题...
+        //FIXME
         //预减库存
         long stock = redisService.decr(RedisKeyPrefix.GOODSLIST_CACHE+goodsId);
         if (stock < 0) {

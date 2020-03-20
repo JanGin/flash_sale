@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 public @interface NeedLogin {
 
-    boolean value() default false;
+    boolean value() default true;
 }
 

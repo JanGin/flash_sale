@@ -66,7 +66,6 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
                         return false;
                     }
                     strRedisService.incr(key);
-
                 } else {
                     strRedisService.set(key, "1", period, TimeUnit.SECONDS);
                 }

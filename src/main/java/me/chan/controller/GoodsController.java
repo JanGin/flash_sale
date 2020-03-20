@@ -144,7 +144,7 @@ public class GoodsController {
 
     @RequestMapping("/detail/{id}")
     @ResponseBody
-    @TrafficLimit(accessTimes = 3)
+    @TrafficLimit(accessTimes = 200)
     public Result<GoodsDetailVO> goodsDetail(User user,
                                @PathVariable("id") Long id) {
         String goodsId = String.valueOf(id);
