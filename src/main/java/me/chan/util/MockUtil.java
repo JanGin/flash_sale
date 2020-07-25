@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import me.chan.domain.User;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class MockUtil {
 
-    private static void createUser(int count) throws Exception{
+    private static void createUser(int count) throws Exception {
         List<User> users = new ArrayList<>(count);
 
         //插入数据库
@@ -40,28 +41,28 @@ public class MockUtil {
         //登录，生成token
         String urlString = "http://localhost:8080/login/do_login";
         File file = new File("D:/tokens.txt");
-        if(file.exists()) {
+        if (file.exists()) {
             file.delete();
         }
         RandomAccessFile raf = new RandomAccessFile(file, "rw");
         file.createNewFile();
         raf.seek(0);
-        for(int i=0,size=users.size(); i< size; i++) {
+        for (int i = 0, size = users.size(); i < size; i++) {
             User user = users.get(i);
             URL url = new URL(urlString);
-            HttpURLConnection co = (HttpURLConnection)url.openConnection();
+            HttpURLConnection co = (HttpURLConnection) url.openConnection();
             co.setRequestMethod("POST");
             co.setDoOutput(true);
             OutputStream out = co.getOutputStream();
-            String params = "mobile="+user.getMobile()+"&password="+MD5Util.inputPwdToFormPwd("123456");
+            String params = "mobile=" + user.getMobile() + "&password=" + MD5Util.inputPwdToFormPwd("123456");
             out.write(params.getBytes());
             out.flush();
             InputStream inputStream = co.getInputStream();
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             byte buff[] = new byte[1024];
             int len = 0;
-            while((len = inputStream.read(buff)) >= 0) {
-                bout.write(buff, 0 ,len);
+            while ((len = inputStream.read(buff)) >= 0) {
+                bout.write(buff, 0, len);
             }
             inputStream.close();
             bout.close();
@@ -70,7 +71,7 @@ public class MockUtil {
             String token = jo.getString("data");
             log.info("{} user generates token is {}:", user.getMobile(), token);
 
-            String row = user.getId()+","+token;
+            String row = user.getId() + "," + token;
             raf.seek(raf.length());
             raf.write(row.getBytes());
             raf.write("\r\n".getBytes());
@@ -80,7 +81,7 @@ public class MockUtil {
         System.out.println("over");
     }
 
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) throws Exception {
         createUser(5000);
     }
 }

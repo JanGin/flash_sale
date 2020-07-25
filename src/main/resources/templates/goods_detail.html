@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>商品详情</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!-- jquery -->
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
     <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
     <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
     <!-- jquery-validator -->
     <script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
@@ -33,13 +33,13 @@
         </tr>
         <tr>
             <td>商品图片</td>
-            <td colspan="3"><img th:src="@{${goods.goodsImg}}" width="200" height="200" /></td>
+            <td colspan="3"><img th:src="@{${goods.goodsImg}}" width="200" height="200"/></td>
         </tr>
         <tr>
             <td>秒杀开始时间</td>
             <td th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td id="saleTip">
-                <input type="hidden" id="remainSeconds" th:value="${remainSeconds}" />
+                <input type="hidden" id="remainSeconds" th:value="${remainSeconds}"/>
                 <span th:if="${saleStatus eq 0}">秒杀倒计时：<span id="countDown" th:text="${remainSeconds}"></span>秒</span>
                 <span th:if="${saleStatus eq 1}">秒杀进行中</span>
                 <span th:if="${saleStatus eq 2}">秒杀已结束</span>
@@ -47,7 +47,7 @@
             <td>
                 <form id="saleForm" method="post" action="/fs/do_sale">
                     <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
-                    <input type="hidden" name="goodsId" th:value="${goods.id}" />
+                    <input type="hidden" name="goodsId" th:value="${goods.id}"/>
                 </form>
             </td>
         </tr>
@@ -67,27 +67,27 @@
 </div>
 </body>
 <script>
-    $(function(){
+    $(function () {
         countDown();
     });
 
-    function countDown(){
+    function countDown() {
         var remainSeconds = $("#remainSeconds").val();
         var timeout;
-        if(remainSeconds > 0){//秒杀还没开始，倒计时
+        if (remainSeconds > 0) {//秒杀还没开始，倒计时
             $("#buyButton").attr("disabled", true);
-            timeout = setTimeout(function(){
+            timeout = setTimeout(function () {
                 $("#countDown").text(remainSeconds - 1);
                 $("#remainSeconds").val(remainSeconds - 1);
                 countDown();
-            },1000);
-        }else if(remainSeconds == 0){//秒杀进行中
+            }, 1000);
+        } else if (remainSeconds == 0) {//秒杀进行中
             $("#buyButton").attr("disabled", false);
-            if(timeout){
+            if (timeout) {
                 clearTimeout(timeout);
             }
             $("#saleTip").html("秒杀进行中");
-        }else{//秒杀已经结束
+        } else {//秒杀已经结束
             $("#buyButton").attr("disabled", true);
             $("#buyButton").text("活动已结束");
             $("#saleTip").html("秒杀已经结束");

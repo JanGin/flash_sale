@@ -1,6 +1,5 @@
 package me.chan.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import me.chan.common.CodeMsg;
 import me.chan.common.RedisKeyPrefix;
@@ -50,13 +49,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByToken(String token, HttpServletResponse response) {
-        String json = redisService.get(RedisKeyPrefix.USER_KEY+token).toString();
+        String json = redisService.get(RedisKeyPrefix.USER_KEY + token).toString();
         User user = JSONObject.parseObject(json, User.class);
         if (null == user)
             throw new UserException(CodeMsg.SESSION_ERROR);
 
         //延长token的有效期
-        redisService.set(RedisKeyPrefix.USER_KEY+token, user, expirationTime, TimeUnit.SECONDS);
+        redisService.set(RedisKeyPrefix.USER_KEY + token, user, expirationTime, TimeUnit.SECONDS);
         CookieUtil.addCookie(response, (int) expirationTime, token);
         return user;
     }

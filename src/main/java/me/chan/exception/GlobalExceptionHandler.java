@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler  {
+public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(value = Exception.class)
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler  {
             return Result.error(CodeMsg.BIND_ERROR.customizeMessage(msg));
         }
 
-        if (e instanceof  GlobalException) {
+        if (e instanceof GlobalException) {
             GlobalException ex = (GlobalException) e;
             return Result.error(ex.getCodeMsg());
         }

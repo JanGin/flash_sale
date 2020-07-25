@@ -13,7 +13,7 @@ public class FlashSaleOrder {
 
     private Long goodsId;
 
-    private Long  userId;
+    private Long userId;
 
     private Date createTime;
 }

@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 public @interface TrafficLimit {
 
     int accessTimes() default 60;
+
     int withinSeconds() default 60;
 }

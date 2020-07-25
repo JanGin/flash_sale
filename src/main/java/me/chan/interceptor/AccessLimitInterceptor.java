@@ -96,7 +96,7 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isBlank(cookieToken) && StringUtils.isBlank(paramToken))
             return null;
 
-        String token = StringUtils.isBlank(cookieToken)?paramToken:cookieToken;
+        String token = StringUtils.isBlank(cookieToken) ? paramToken : cookieToken;
         return userService.getUserByToken(token, response);
     }
 

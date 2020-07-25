@@ -2,11 +2,11 @@
 <html>
 <head>
     <title>商品详情</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!-- jquery -->
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
     <!-- jquery-validator -->
     <script type="text/javascript" src="/jquery-validation/jquery.validate.min.js"></script>
@@ -33,21 +33,21 @@
         </tr>
         <tr>
             <td>商品图片</td>
-            <td colspan="3"><img id="goodsImg" src="" width="200" height="200" /></td>
+            <td colspan="3"><img id="goodsImg" src="" width="200" height="200"/></td>
         </tr>
         <tr>
             <td>秒杀开始时间</td>
             <td id="startTime"></td>
             <td>
-                <input type="hidden" id="remainSeconds" />
+                <input type="hidden" id="remainSeconds"/>
                 <span id="saleTip"></span>
             </td>
             <td>
                 <div class="form-inline">
-                    <img id="verifyImg" width="80" height="32"  style="display:none;"/>
-                    <input id="verifyCode"  class="form-control" style="display:none"/>
+                    <img id="verifyImg" width="80" height="32" style="display:none;"/>
+                    <input id="verifyCode" class="form-control" style="display:none"/>
                     <button class="btn btn-primary" id="buyButton">立即秒杀</button>
-                    <input type="hidden" name="goodsId" id="goodsId" />
+                    <input type="hidden" name="goodsId" id="goodsId"/>
                 </div>
 
             </td>
@@ -68,61 +68,61 @@
 </div>
 </body>
 <script>
-    $(function(){
+    $(function () {
         getDetail();
 
         $("#buyButton").on('click', function () {
-            if ($("#verifyImg").css("display")=="none") {
+            if ($("#verifyImg").css("display") == "none") {
                 $("#verifyImg").show();
             }
-            if ($("#verifyCode").css("display")=="none") {
+            if ($("#verifyCode").css("display") == "none") {
                 $("#verifyCode").show();
             }
 
             var code = $("#verifyCode").val();
             if (code == '') {
                 layer.msg("请先输入验证码！");
-                return ;
+                return;
             }
 
             $.ajax({
                 url: "/fs/path",        //获取秒杀地址
-                type:"GET",
-                data:{
-                    "goodsId":$("#goodsId").val()
+                type: "GET",
+                data: {
+                    "goodsId": $("#goodsId").val()
                 },
-                success:function(data){
-                    if(data.retCode == 0) {
+                success: function (data) {
+                    if (data.retCode == 0) {
                         //获取秒杀path
                         var path = data.data;
                         doFs($("#goodsId").val(), path);
-                    } else{
+                    } else {
                         layer.msg(data.message);
                     }
                 },
-                error:function(){
+                error: function () {
                     layer.msg("服务器开小差了...");
                 }
             });
         });
 
-        $("#verifyImg").on('click', function() {
+        $("#verifyImg").on('click', function () {
 
             $.ajax({
                 url: "/fs/verifyCode",
-                type:"GET",
-                data:{
-                    "goodsId":$("#goodsId").val()
+                type: "GET",
+                data: {
+                    "goodsId": $("#goodsId").val()
                 },
-                success:function(data) {
-                    if(data.retCode == 0) {
+                success: function (data) {
+                    if (data.retCode == 0) {
                         var src = data.data;
-                        $("#verifyImg").attr("src", "data:image/jpeg;base64,"+src);
-                    } else{
+                        $("#verifyImg").attr("src", "data:image/jpeg;base64," + src);
+                    } else {
                         layer.msg(data.message);
                     }
                 },
-                error:function() {
+                error: function () {
                     layer.msg("服务器开小差了...");
                 }
             });
@@ -133,27 +133,27 @@
 
     function doFs(goodsId, path) {
         $.ajax({
-            url:"/fs/"+path+"/do_sale",
-            type:"POST",
-            data:{
-                "goodsId" : goodsId,
+            url: "/fs/" + path + "/do_sale",
+            type: "POST",
+            data: {
+                "goodsId": goodsId,
                 "code": $("#verifyCode").val().trim()
             },
-            success:function(data){
-                if(data.retCode == 0){
+            success: function (data) {
+                if (data.retCode == 0) {
                     var result = data.data;
-                    if(result < 0) {
+                    if (result < 0) {
                         layer.msg("对不起，请刷新页面重试");
-                    } else if(result == 1) {//继续轮询，还在排队
-                        setTimeout(function(){
+                    } else if (result == 1) {//继续轮询，还在排队
+                        setTimeout(function () {
                             getFsResult(goodsId);
                         }, 200);
                     } else {
-                        layer.confirm("恭喜你，成功抢到商品！查看订单？", {btn:["确定","取消"]},
-                            function() {
-                                window.location.href="/order/order_detail.htm?id="+result;
+                        layer.confirm("恭喜你，成功抢到商品！查看订单？", {btn: ["确定", "取消"]},
+                            function () {
+                                window.location.href = "/order/order_detail.htm?id=" + result;
                             },
-                            function() {
+                            function () {
                                 layer.closeAll();
                             });
                     }
@@ -161,35 +161,35 @@
                     layer.msg(data.message);
                 }
             },
-            error:function() {
+            error: function () {
                 layer.msg("服务器开小差了...");
             }
         });
     }
 
-    function getFsResult(goodsId){
+    function getFsResult(goodsId) {
         g_showLoading();
         $.ajax({
-            url:"/fs/result",
-            type:"GET",
-            data:{
-                "goodsId" : goodsId
+            url: "/fs/result",
+            type: "GET",
+            data: {
+                "goodsId": goodsId
             },
-            success:function(data) {
-                if(data.retCode == 0){
+            success: function (data) {
+                if (data.retCode == 0) {
                     var result = data.data;
-                    if(result < 0) {
+                    if (result < 0) {
                         layer.msg("对不起，请刷新页面重试");
-                    } else if(result == 1) {//继续轮询，还在排队
-                        setTimeout(function() {
+                    } else if (result == 1) {//继续轮询，还在排队
+                        setTimeout(function () {
                             getFsResult(goodsId);
                         }, 200);
                     } else {
-                        layer.confirm("恭喜你，成功抢到！查看订单？", {btn:["确定","取消"]},
-                            function(){
-                                window.location.href="/order/order_detail.htm?id="+result;
+                        layer.confirm("恭喜你，成功抢到！查看订单？", {btn: ["确定", "取消"]},
+                            function () {
+                                window.location.href = "/order/order_detail.htm?id=" + result;
                             },
-                            function(){
+                            function () {
                                 layer.closeAll();
                             });
                     }
@@ -197,26 +197,26 @@
                     layer.msg(data.message);
                 }
             },
-            error:function() {
+            error: function () {
                 layer.msg("服务器开小差了...");
             }
         });
     }
 
 
-    function countDown(){
+    function countDown() {
         var remainSeconds = $("#remainSeconds").val();
         var timeout;
-        if(remainSeconds > 0) {//秒杀还没开始，倒计时
-            $("#saleTip").html("秒杀倒计时："+remainSeconds+"秒");
+        if (remainSeconds > 0) {//秒杀还没开始，倒计时
+            $("#saleTip").html("秒杀倒计时：" + remainSeconds + "秒");
             $("#buyButton").attr("disabled", true);
-            timeout = setTimeout(function(){
+            timeout = setTimeout(function () {
                 $("#remainSeconds").val(remainSeconds - 1);
                 countDown();
-            },1000);
-        } else if(remainSeconds == 0) {//秒杀进行中
+            }, 1000);
+        } else if (remainSeconds == 0) {//秒杀进行中
             $("#buyButton").attr("disabled", false);
-            if(timeout){
+            if (timeout) {
                 clearTimeout(timeout);
             }
             $("#saleTip").html("秒杀进行中");
@@ -229,17 +229,17 @@
     function getDetail() {
         var goodsId = g_getQueryString("goodsId");
         $.ajax({
-            url:"/goods/detail/" + goodsId ,
-            type:"GET",
+            url: "/goods/detail/" + goodsId,
+            type: "GET",
 
-            success:function(data) {
-                if(data.retCode == 0) {
+            success: function (data) {
+                if (data.retCode == 0) {
                     render(data.data);
                 } else {
                     layer.msg(data.message);
                 }
             },
-            error:function() {
+            error: function () {
                 layer.msg("服务器开小差了...");
             }
         });
@@ -247,10 +247,10 @@
 
     function render(data) {
         var saleStatus = data.saleStatus;
-        var  remainSeconds = data.remainSeconds;
+        var remainSeconds = data.remainSeconds;
         var goods = data.goodsVO;
         var user = data.user;
-        if(user){
+        if (user) {
             $("#loginTip").hide();
         }
         $("#goodsName").text(goods.goodsName);

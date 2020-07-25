@@ -13,7 +13,7 @@ public class MD5Util {
     private static final String salt = "6c8d2a7e";
 
     public static String inputPwdToFormPwd(String inputPwd) {
-        String str = "" + salt.charAt(0)+salt.charAt(2) + inputPwd +salt.charAt(4) + salt.charAt(3);
+        String str = "" + salt.charAt(0) + salt.charAt(2) + inputPwd + salt.charAt(4) + salt.charAt(3);
         String result = md5(str);
         if (log.isDebugEnabled())
             log.debug("[inputPwdToFormPwd]--form password is {}", result);
@@ -22,7 +22,7 @@ public class MD5Util {
     }
 
     public static String formPwdToDBPwd(String formPwd, String salt) {
-        String str = ""+salt.charAt(0)+salt.charAt(2) + formPwd +salt.charAt(4) + salt.charAt(3);
+        String str = "" + salt.charAt(0) + salt.charAt(2) + formPwd + salt.charAt(4) + salt.charAt(3);
         return md5(str);
     }
 
@@ -35,6 +35,6 @@ public class MD5Util {
 
     public static void main(String[] args) {
         // 3cf206a72c2019aeeefb1a09568b2410
-        System.out.println(inputPwdToDbPwd("123456a.","6c8d2a7e"));
+        System.out.println(inputPwdToDbPwd("123456a.", "6c8d2a7e"));
     }
 }

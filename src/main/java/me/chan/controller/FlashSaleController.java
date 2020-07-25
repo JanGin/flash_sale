@@ -52,6 +52,7 @@ public class FlashSaleController implements InitializingBean {
     /**
      * QPS : 616
      * 5000 threads 10 times
+     *
      * @param model
      * @param user
      * @param goodsId
@@ -112,8 +113,8 @@ public class FlashSaleController implements InitializingBean {
     @ResponseBody
     @TrafficLimit(accessTimes = 5, withinSeconds = 10)
     @NeedLogin
-    public Result<Long> doFlashSale(User user, @RequestParam("goodsId")Long goodsId,
-                                    @RequestParam("code")String code,   @PathVariable("path")String path) {
+    public Result<Long> doFlashSale(User user, @RequestParam("goodsId") Long goodsId,
+                                    @RequestParam("code") String code, @PathVariable("path") String path) {
         /*
         if (null == user) {
            return Result.error(CodeMsg.SESSION_ERROR);
@@ -139,15 +140,15 @@ public class FlashSaleController implements InitializingBean {
         //每点击一次按钮都能成功预减库存，有问题...
         //FIXME
         //预减库存
-        long stock = redisService.decr(RedisKeyPrefix.GOODSLIST_CACHE+goodsId);
+        long stock = redisService.decr(RedisKeyPrefix.GOODSLIST_CACHE + goodsId);
         if (stock < 0) {
             localOverMap.put(goodsId, true);
             return Result.error(CodeMsg.SALE_ACTIVITY_OVER);
         }
 
         FlashSaleOrder order = orderService.getFSOrderByGoodsIdAndUserId(goodsId, user.getId());
-        if(order != null) {
-           return Result.error(CodeMsg.SALE_REPEAT_FORBIDDEN);
+        if (order != null) {
+            return Result.error(CodeMsg.SALE_REPEAT_FORBIDDEN);
         }
         FlashsaleMsg fsmsg = new FlashsaleMsg();
         fsmsg.setGoodsId(goodsId);
@@ -171,21 +172,22 @@ public class FlashSaleController implements InitializingBean {
 
     /**
      * 输出base64编码的图片
+     *
      * @param user
      * @param goodsId
      * @return
      */
     @GetMapping("/verifyCode")
     @ResponseBody
-    public Result<String> verifyCode(User user, @RequestParam("goodsId")Long goodsId) {
+    public Result<String> verifyCode(User user, @RequestParam("goodsId") Long goodsId) {
         /**
-        if(null == user) {
-            return Result.error(CodeMsg.SESSION_ERROR);
-        }
+         if(null == user) {
+         return Result.error(CodeMsg.SESSION_ERROR);
+         }
 
-        if (!localOverMap.get(goodsId)) {
-            return Result.error(CodeMsg.SALE_PRODUCT_SELLOUT);
-        }
+         if (!localOverMap.get(goodsId)) {
+         return Result.error(CodeMsg.SALE_PRODUCT_SELLOUT);
+         }
          **/
         String base64Img = vcService.createBase64VerifyImg(user, goodsId);
         return Result.success(base64Img);
@@ -194,7 +196,7 @@ public class FlashSaleController implements InitializingBean {
 
     @GetMapping("/result")
     @ResponseBody
-    public Result<Long> flashSaleResult(User user, @RequestParam("goodsId")Long goodsId) {
+    public Result<Long> flashSaleResult(User user, @RequestParam("goodsId") Long goodsId) {
         FlashSaleOrder order = orderService.getFSOrderByGoodsIdAndUserId(goodsId, user.getId());
         if (Objects.nonNull(order)) {
             return Result.success(order.getOrderId());
@@ -210,8 +212,8 @@ public class FlashSaleController implements InitializingBean {
 
         List<GoodsVO> list = goodsService.getGoodsList();
         if (!CollectionUtils.isEmpty(list)) {
-            list.stream().forEach((e)->{
-                redisService.set(RedisKeyPrefix.GOODSLIST_CACHE+e.getId(), e.getStockCount());
+            list.stream().forEach((e) -> {
+                redisService.set(RedisKeyPrefix.GOODSLIST_CACHE + e.getId(), e.getStockCount());
                 localOverMap.put(e.getId(), false);
             });
         }

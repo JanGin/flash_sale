@@ -29,7 +29,7 @@ public class MessageReceiver {
     @Autowired
     private GoodsService goodsService;
 
-    @RabbitListener(queues={GlobalConstant.QUEUE_NAME})
+    @RabbitListener(queues = {GlobalConstant.QUEUE_NAME})
     public void receive(String message) {
         log.info("receive message:{}", message);
     }
@@ -43,12 +43,12 @@ public class MessageReceiver {
         User user = fsmsg.getUser();
         GoodsVO goods = goodsService.getGoodsById(goodsId);
         if (null == goods || goods.getStockCount() <= 0) {
-           return ;
+            return;
         }
 
         FlashSaleOrder order = orderService.getFSOrderByGoodsIdAndUserId(goodsId, user.getId());
         if (order != null) {
-            return ;
+            return;
         }
 
         fsService.doFlashSale(goods, user);

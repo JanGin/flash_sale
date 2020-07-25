@@ -106,7 +106,7 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
     }
 
     private String generateVerifyCode(Random rdm) {
-        char[] ops = new char[] {'+', '*'};
+        char[] ops = new char[]{'+', '*'};
         int num1 = rdm.nextInt(10);
         int num2 = rdm.nextInt(10);
         int num3 = rdm.nextInt(10);

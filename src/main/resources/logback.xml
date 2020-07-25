@@ -2,7 +2,7 @@
 <configuration debug="false">
     <contextName>flash-sale</contextName>
 
-    <property name="LOG_HOME" value="./log" />
+    <property name="LOG_HOME" value="./log"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -40,7 +40,7 @@
     </appender>
 
     <logger name="me.chan" level="INFO">
-        <appender-ref ref="INFO" />
+        <appender-ref ref="INFO"/>
     </logger>
 
     <logger name="me.chan" level="ERROR">
@@ -64,9 +64,9 @@
     </logger>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="INFO" />
-        <appender-ref ref="ERROR" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="ERROR"/>
     </root>
 
 </configuration>

@@ -24,8 +24,7 @@ public class FormInputValidator implements ConstraintValidator<FormInput, String
         if (required) {
             if (FormInputType.INPUT_MOBILENUMBER.equals(inputType)) {
                 return ValidationUtil.isMobileNumber(s);
-            }
-            else if (FormInputType.INPUT_PASSWORD.equals(inputType)) {
+            } else if (FormInputType.INPUT_PASSWORD.equals(inputType)) {
                 return ValidationUtil.isValidPwd(s);
             } else {
                 return ValidationUtil.isFormInput(s);

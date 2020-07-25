@@ -57,9 +57,9 @@ public class LoginServiceImpl implements LoginService {
 
         //生成token写到cookie中
         String token = UUIDUtil.generate();
-        String key = RedisKeyPrefix.USER_KEY +  token;
+        String key = RedisKeyPrefix.USER_KEY + token;
         redisService.set(key, user, expirationTime, TimeUnit.SECONDS);
-        CookieUtil.addCookie(response, (int)expirationTime, token);
+        CookieUtil.addCookie(response, (int) expirationTime, token);
 
         return token;
     }

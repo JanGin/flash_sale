@@ -82,7 +82,7 @@ public class GoodsController {
             return html;
         }
 
-        List<GoodsVO> goodsList =  goodsService.getGoodsList();
+        List<GoodsVO> goodsList = goodsService.getGoodsList();
         model.addAttribute("user", user);
         model.addAttribute("goodsList", goodsList);
 
@@ -98,9 +98,9 @@ public class GoodsController {
     @RequestMapping("/detail2/{id}")
     @ResponseBody
     public String goodsDetail2(Model model, User user,
-                            @PathVariable("id") Long id,
-                              HttpServletRequest req,
-                              HttpServletResponse resp) {
+                               @PathVariable("id") Long id,
+                               HttpServletRequest req,
+                               HttpServletResponse resp) {
         String goodsId = String.valueOf(id);
         if ("null".equals(goodsId) || StringUtils.isBlank(goodsId)
                 || !StringUtils.isNumeric(goodsId)) {
@@ -122,7 +122,7 @@ public class GoodsController {
         long endTime = goodsVO.getEndDate().getTime();
         log.info("start:{}, current:{}, there is {} time left...", startTime, currentTime, (currentTime - startTime));
         if (startTime > currentTime) {
-            remainSeconds = (int)((startTime - currentTime) / 1000);
+            remainSeconds = (int) ((startTime - currentTime) / 1000);
         } else if (currentTime > endTime) {
             saleStatus = 2;
             remainSeconds = -1;
@@ -137,7 +137,7 @@ public class GoodsController {
         WebContext ctx = new WebContext(req, resp, req.getServletContext(), req.getLocale(), model.asMap());
         html = resolver.getTemplateEngine().process("goods_detail", ctx);
         if (StringUtils.isNotBlank(html)) {
-            redisService.set(RedisKeyPrefix.GOODSID_HTML_CACHE+goodsId, html, 60L, TimeUnit.SECONDS);
+            redisService.set(RedisKeyPrefix.GOODSID_HTML_CACHE + goodsId, html, 60L, TimeUnit.SECONDS);
         }
         return html;
     }
@@ -146,7 +146,7 @@ public class GoodsController {
     @ResponseBody
     @TrafficLimit(accessTimes = 200)
     public Result<GoodsDetailVO> goodsDetail(User user,
-                               @PathVariable("id") Long id) {
+                                             @PathVariable("id") Long id) {
         String goodsId = String.valueOf(id);
         if ("null".equals(goodsId) || StringUtils.isBlank(goodsId)
                 || !StringUtils.isNumeric(goodsId)) {
@@ -164,7 +164,7 @@ public class GoodsController {
         long startTime = goodsVO.getStartDate().getTime();
         long endTime = goodsVO.getEndDate().getTime();
         if (startTime > currentTime) {
-            remainSeconds = (int)((startTime - currentTime) / 1000);
+            remainSeconds = (int) ((startTime - currentTime) / 1000);
         } else if (currentTime > endTime) {
             saleStatus = 2;
             remainSeconds = -1;

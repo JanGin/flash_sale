@@ -10,7 +10,7 @@ public class JSONUtil {
         return t;
     }
 
-    public static  <T> T parseJSON2Obj(JSONObject json, Class<T> clazz) {
+    public static <T> T parseJSON2Obj(JSONObject json, Class<T> clazz) {
         return JSONObject.toJavaObject(json, clazz);
     }
 }

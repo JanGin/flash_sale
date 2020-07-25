@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class MessageSender {
 
 
-   @Autowired
-   private AmqpTemplate amqpTemplate ;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     public void send(String message) {
         log.info("sending message:{}", message);

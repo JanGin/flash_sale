@@ -12,7 +12,7 @@ public interface UserDao {
     User getById(@Param("id") Integer id);
 
     @Insert("INSERT INTO user (id, name) VALUES (#{user.id}, #{user.name})")
-    User addUser(@Param("user")User user);
+    User addUser(@Param("user") User user);
 
     @Select("SELECT u.id, u.mobile, u.login_count FROM user u " +
             "WHERE u.mobile=#{mobile} AND u.password = #{password}")

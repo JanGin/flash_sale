@@ -38,12 +38,12 @@ public class DemoController {
 
     @PostMapping("/user")
     public Result testTransaction(User user) {
-       try {
-           userService.testTx(user);
-       } catch (Exception e) {
+        try {
+            userService.testTx(user);
+        } catch (Exception e) {
             return Result.error(CodeMsg.SERVER_ERROR);
-       }
-       return Result.success(user);
+        }
+        return Result.success(user);
     }
 
     @PostMapping("/redisSet")
@@ -56,7 +56,7 @@ public class DemoController {
 
     @GetMapping("/redisGet")
     public Result testGetFromRedis(@RequestParam("key") String key) {
-        String obj = (String)redisService.get(key);
+        String obj = (String) redisService.get(key);
         User data = JSONObject.parseObject(obj, User.class);
         return Result.success(data);
     }

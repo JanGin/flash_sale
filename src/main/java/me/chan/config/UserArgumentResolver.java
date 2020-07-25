@@ -34,7 +34,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) throws Exception {
 
-        /*HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+        /*HttpServletRequest request = nativeWebURequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
         String cookieToken = getCookieValue(request);
         String paramToken = request.getParameter(GlobalConstant.COOKIE_TOKEN_NAME);
@@ -43,7 +43,9 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
         String token = StringUtils.isBlank(cookieToken)?paramToken:cookieToken;
         return userService.getUserByToken(token, response);*/
-        return UserContext.get();
+        User user = UserContext.get();
+        UserContext.remove();       //避免内存泄漏
+        return user;
     }
 
     private String getCookieValue(HttpServletRequest request) {

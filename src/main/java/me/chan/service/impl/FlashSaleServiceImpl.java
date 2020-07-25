@@ -47,7 +47,7 @@ public class FlashSaleServiceImpl implements FlashSaleService {
 
     @Override
     public String generateFsPath(User user, Long goodsId) {
-        String path = MD5Util.md5(UUIDUtil.generate()+ RandomStringUtils.randomNumeric(4));
+        String path = MD5Util.md5(UUIDUtil.generate() + RandomStringUtils.randomNumeric(4));
         String redisKey = RedisKeyPrefix.GOODSPATH_CACHE + user.getId() + "_" + goodsId;
         strRedisService.set(redisKey, path, 1L, TimeUnit.MINUTES);
         return path;
